@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+   <header>
+     <div class="header-left">
+        <input type="text" id="cityInput" placeholder="Enter Location">
+        <button id="searchBtn">Search</button>
+     </div>
+     <h1 class="header-title">Weather App</h1>
+     <div class="header-right">
+     <div class="temperature-toggle">
+        <!-- for the span, do it in the css!-->
+        <buton id="farenheit/celsius">Farenheit/Celsius</buton>
+     </div>
+    </div> 
+   </header>
+   
+   <nav>
+     <div class="nav-left">
+        <div class="day">Monday</div>
+        <div class="degrees">72°F</div>
+     </div>
+     <div class="nav-right">
+        <ul class="weather-details">
+            <li>Uv Ray:</li>
+            <li>Pollen:</li>
+            <li>Rain:</li>
+            <li>Snow:</li>
+        </ul>
+     </div>
+   </nav>
+
+   <section class="weather-forecast">
+     <div class="day">
+        <div class="day-name">Monday</div>
+        <div class="degrees">75°F</div>
+        <div class="rain">10%</div>
+     </div>
+     
+   </seciotn>
+   <script src="./assets/js/script.js"></script>
+</body>
+</html>
