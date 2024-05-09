@@ -1,0 +1,28 @@
+* {
+    background-color: white;
+    margin: 0px;
+}
+
+header {
+    display: flex;
+    flex: wrap;
+    height: 100px;
+    border: solid 5px black;
+    justify-content: center;
+}
+
+nav {
+    display: flex;
+    flex: wrap;
+    justify-content: center;
+    border: solid 5px blue;
+    height: 300px;
+}
+
+.weather-forecast {
+    display: flex;
+    flex: wrap;
+    justify-content: center;
+    height: 300px;
+    border: solid 5px red;
+}
