@@ -4,7 +4,7 @@ document, addEventListener('DOMContentLoade', function() {
     const cityInput = document.getElementById('cityInput');
 
     searchBtn.addEventListener('click', function() {
-        const city = cityInput.value.trim();
+        let city = cityInput.value.trim();
         if (city !== '') {
             fetchWeatherData(city);
         } else {
@@ -14,13 +14,13 @@ document, addEventListener('DOMContentLoade', function() {
 });
 
 function fetchWeatherData(dataString) {
-    const dataArray = dataString.split(', ');
+    let dataArray = dataString.split(', ');
     dataArray.forEach(item => {
         const [key, value] = item.split(': ');
         weatherData[key.trim()] = value.trim();
     });
-    const city = weatherData['City'];
-    const state = weatherData['State'];
+    let city = weatherData['City'];
+    let state = weatherData['State'];
 
     console.log('City:', city);
     console.log('State:', state);
