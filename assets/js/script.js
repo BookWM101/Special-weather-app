@@ -1,3 +1,4 @@
+
 document, addEventListener('DOMContentLoade', function() {
     const searchBtn = document.getElementById('searchBtn');
     const cityInput = document.getElementById('cityInput');
@@ -24,3 +25,19 @@ function fetchWeatherData(dataString) {
     console.log('City:', city);
     console.log('State:', state);
 }
+
+const tempBtn = document.getElementById('fahrenheit/celsius');
+let temp = cel;
+let cel = fetch();
+let fah = (cel*9.0/5.0)+32.0;
+
+function tempChange () {
+    if (temp == cel) {
+        temp = fah }
+        else {
+            temp = cel
+        }
+}
+
+tempBtn.addEventListener('click', tempChange);
+
