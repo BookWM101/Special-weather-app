@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const temperatureElement = document.createElement('div');
         temperatureElement.classList.add('temperature');
 
-        const weatherSymbolElement = document.createElement.('div');
+        const weatherSymbolElement = document.createElement('div');
         weatherSymbolElement.classList.add('weather-symbol');
 
         dayForecast.appendChild(dayElement);
