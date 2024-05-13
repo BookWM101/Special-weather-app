@@ -26,3 +26,13 @@ nav {
     height: 300px;
     border: solid 5px red;
 }
+
+fahrenheit/celsis {
+    border: solid 5px black;
+    height: 10px;
+    width: 20px;
+}
+
+button:hover {
+    text-decoration: underline;
+}

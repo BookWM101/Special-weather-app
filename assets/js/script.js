@@ -145,8 +145,9 @@ let symbol = document.getElementById('weatherSymbol');
 let weather = fetch() //fetch current weather from api//
 console.log(weather);
 let temp = cel;
-let cel = fetch(); //fetch current degrees in celsius from api//
-console.log(cel);
+
+//let cel = fetch() NEED TO FINISH FETCH RESPONSE!
+
 let fah = (cel*9.0/5.0)+32.0;
 console.log(fah);
 
