@@ -55,7 +55,7 @@ fetch('https://api.openuv.io/api/v1/uv?lat=-33.34&lng=115.342', {
 /* function for the nav left */
 document.addEventListener('DOMContentLoaded', function() {
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const navLeft = document.querySelector('.nav-left');
+    const cdLeft = document.querySelector('.cd-left');
 
     days.forEach(day => {
         const dayElement = document.createElement('div');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (day === 'Monday') {
             dayElement.classList.add('active');
         }
-        navLeft.appendChild(dayElement);
+        cdLeft.appendChild(dayElement);
     });
 });
 
