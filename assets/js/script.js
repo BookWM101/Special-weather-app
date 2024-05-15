@@ -1,4 +1,4 @@
-document, addEventListener('DOMContentLoade', function() {
+document, addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const cityInput = document.getElementById('cityInput');
 
@@ -52,6 +52,42 @@ fetch('https://api.openuv.io/api/v1/uv?lat=-33.34&lng=115.342', {
         console.error('There was a problem with the fetch operation:', error);
     });
 
+/* function for the nav left */
+document.addEventListener('DOMContentLoaded', function() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const navLeft = document.querySelector('.nav-left');
+
+    days.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+        dayElement.textContent = day;
+        dayElement.addEventListener('click', function() {
+            document.querySelectorAll('.day').forEach(day => {
+                day.classList.remove('active');
+            });
+            this.classList.add('active');
+            updateWeatherSymbol(day);
+        });
+        if (day === 'Monday') {
+            dayElement.classList.add('active');
+        }
+        navLeft.appendChild(dayElement);
+    });
+});
+
+function updateWeatherSymbol(day) {
+    const weatherSymbol = getWeatherSymbol(day);
+    const navLeft = document.querySelector('.nav-left');
+    const selectedDay = navLeft.querySelector('.active');
+    if (selectedDay) {
+        selectedDay.innerHTML = '';
+        const img = document.createElement('img');
+        img.src= weatherSymbol; //replace wiith the actual image url
+        selectedDay.appendChild(img);
+    }
+}
+
+
 
 /* function for the nav right */
 document.addEventListener('DOMContentLoaded', function() {
@@ -94,15 +130,25 @@ function updateWeatherData(selectedDay) {
 };
 
 /*function for section(basic information for each day) */
+function getWeatherSymbol(temperature) {
+    // Example logic to determine weather symbol based on temperature       
+    if (temperature < 10) {
+        return 'cold';
+    } else if (temperature >= 10 && temperature < 25) {
+        return 'moderate';
+    } else {
+        return 'hot';
+    }
+}
 document.addEventListener('DOMContentLoaded', function() {
     const weatherData = [
-        {day: 'Monday, '},
-        {day: 'Tuesday, '},
-        {day: 'Wednesday, '},
-        {day: 'Thursday, '},
-        {day: 'Friday, '},
-        {day: 'Saturday, '},
-        {day: 'Sunday, '},
+        { day: 'Monday' },
+        { day: 'Tuesday' },
+        { day: 'Wednesday' },
+        { day: 'Thursday' },
+        { day: 'Friday' },
+        { day: 'Saturday' },
+        { day: 'Sunday' },
     ];
 
     const forecastSection = document.querySelector('.weather-forecast');
@@ -110,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
     weatherData.forEach(dayData => {
         const dayForecast = document.createElement('div');
         dayForecast.classList.add('day-forecast');
-        
+
         const dayElement = document.createElement('div');
         dayElement.classList.add('day-forecast');
 
@@ -126,18 +172,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
         forecastSection.appendChild(dayForecast);
 
-        // Fetch temperature data for each day from the weather API(write the weather api here) */
+        const apiKey = '5f316c0912544405a317e3e5fb0f69a9';
+        const url = 'https://api.weatherbit.io/v2.0/history/daily';
+        const startDate = '2024-05-16';
+        const endDate = '2024-05-23';
+        const postalCode = '06606';
+        const country = 'US';
 
-        const weatherSymbol = getWeatherSymbol(temperature);
-        weatherSymbolElement.textContent = weatherSymbol;
+        const requestURL = `${url}?postal_code=${postalCode}&country=${country}&start_date=${startDate}&end_date=${endDate}&key=${apiKey}`;
 
-        console.log('Temperature for ${dayData.day}; ${temperature} ') /*need to maybe redo after finishing java, making sure everyday will change their f to c , c to f */
-        console.log(`Weather symbol for ${dayData.day}: ${weatherSymbol}`);
-    })
-    .catch(error => {
-        console.error('Error fetching temperature:', error);
-})
-        console.log(forecastSection);
+        fetch(requestURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const temperature = data.temperature; // Assuming the temperature is available in the API response
+                const weatherSymbol = getWeatherSymbol(temperature);
+                weatherSymbolElement.textContent = weatherSymbol;
+                console.log(`Temperature for ${dayData.day}: ${temperature}`);
+                console.log(`Weather symbol for ${dayData.day}: ${weatherSymbol}`);
+            })
+            .catch(error => {
+                console.error('Error fetching temperature:', error);
+            });
+    });
+
+    console.log(forecastSection);
 });
 
 const tempBtn = document.getElementById('fahrenheit/celsius');
