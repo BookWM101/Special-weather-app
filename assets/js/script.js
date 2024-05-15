@@ -129,7 +129,7 @@ function updateWeatherData(selectedDay) {
    
 };
 
-/*function for section(basic information for each day) */
+/*function for section(basic information for each day)
 function getWeatherSymbol(temperature) {
     // Example logic to determine weather symbol based on temperature       
     if (temperature < 10) {
@@ -139,7 +139,9 @@ function getWeatherSymbol(temperature) {
     } else {
         return 'hot';
     }
-}
+}*/
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const weatherData = [
         { day: 'Monday' },
