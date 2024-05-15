@@ -1,15 +1,8 @@
-// Weather API key and URL
-const weatherApiKey = '5f316c0912544405a317e3e5fb0f69a9';
-const weatherUrl = 'https://api.weatherbit.io/v2.0/forecast/daily';
-
-// UV API key and URL
-const uvApiKey = 'openuv-u9gmcrlvzuztap-io';
-const uvUrl = 'https://api.openuv.io/api/v1/uv';
-
 document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const cityInput = document.getElementById('cityInput');
     const tempBtn = document.getElementById('farenheit/celsius');
+    const forecastSection = document.querySelector('.weekForecast');
     
     // Search button event listener
     searchBtn.addEventListener('click', function() {
@@ -20,13 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please enter a city name.');
         }
     });
-    
+
     // Temperature conversion event listener
     tempBtn.addEventListener('click', tempChange);
 
     // Initial setup for week days
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const forecastSection = document.querySelector('.weekForecast');
 
     days.forEach(day => {
         const dayElement = document.createElement('div');
@@ -51,9 +43,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchWeatherData(city) {
-    const requestURL = `${weatherUrl}?city=${city}&key=${weatherApiKey}`;
-    
-    fetch(requestURL)
+    const weatherApiKey = '5f316c0912544405a317e3e5fb0f69a9';
+    const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${weatherApiKey}`;
+
+    fetch(weatherUrl)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -62,7 +55,8 @@ function fetchWeatherData(city) {
         })
         .then(data => {
             updateWeatherData(data);
-            fetchUVData(data.lat, data.lon);
+            const { lat, lon } = data.city;
+            fetchUVData(lat, lon);
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
@@ -70,7 +64,10 @@ function fetchWeatherData(city) {
 }
 
 function fetchUVData(lat, lon) {
-    fetch(`${uvUrl}?lat=${lat}&lng=${lon}`, {
+    const uvApiKey = 'openuv-u9gmcrlvzuztap-io';
+    const uvUrl = `https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lon}`;
+
+    fetch(uvUrl, {
         method: 'GET',
         headers: {
             'x-access-token': uvApiKey
@@ -83,7 +80,7 @@ function fetchUVData(lat, lon) {
         return response.json();
     })
     .then(data => {
-        console.log('UV Index:', data.uv);
+        console.log('UV Index:', data.result.uv);
         // Update UV data on the page as needed
     })
     .catch(error => {
