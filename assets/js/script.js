@@ -1,137 +1,139 @@
-document, addEventListener('DOMContentLoaded', function() {
+// Weather API key and URL
+const weatherApiKey = '5f316c0912544405a317e3e5fb0f69a9';
+const weatherUrl = 'https://api.weatherbit.io/v2.0/forecast/daily';
+
+// UV API key and URL
+const uvApiKey = 'openuv-u9gmcrlvzuztap-io';
+const uvUrl = 'https://api.openuv.io/api/v1/uv';
+
+document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const cityInput = document.getElementById('cityInput');
-
+    const tempBtn = document.getElementById('farenheit/celsius');
+    
+    // Search button event listener
     searchBtn.addEventListener('click', function() {
-        let city = cityInput.value.trim();
+        const city = cityInput.value.trim();
         if (city !== '') {
             fetchWeatherData(city);
         } else {
             alert('Please enter a city name.');
         }
-    })
+    });
+    
+    // Temperature conversion event listener
+    tempBtn.addEventListener('click', tempChange);
+
+    // Initial setup for week days
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const forecastSection = document.querySelector('.weekForecast');
+
+    days.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('dayOfWeek');
+        
+        const dayNameElement = document.createElement('div');
+        dayNameElement.classList.add('day-name');
+        dayNameElement.textContent = day;
+
+        const dayDegreesElement = document.createElement('div');
+        dayDegreesElement.classList.add('day-degrees');
+
+        const dayWeatherElement = document.createElement('div');
+        dayWeatherElement.classList.add('day-weather');
+
+        dayElement.appendChild(dayNameElement);
+        dayElement.appendChild(dayDegreesElement);
+        dayElement.appendChild(dayWeatherElement);
+        
+        forecastSection.appendChild(dayElement);
+    });
 });
 
-function fetchWeatherData(dataString) {
-    let dataArray = dataString.split(', ');
-    dataArray.forEach(item => {
-        const [key, value] = item.split(': ');
-        weatherData[key.trim()] = value.trim();
-    });
-    let city = weatherData['City'];
-    let state = weatherData['State'];
-
-    console.log('City:', city);
-    console.log('State:', state);
+function fetchWeatherData(city) {
+    const requestURL = `${weatherUrl}?city=${city}&key=${weatherApiKey}`;
+    
+    fetch(requestURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateWeatherData(data);
+            fetchUVData(data.lat, data.lon);
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+        });
 }
 
-/* UV Api*/
-const apiKey = 'openuv-u9gmcrlvzuztap-io'
-
-fetch('https://api.openuv.io/api/v1/uv?lat=-33.34&lng=115.342', {
-    method: 'GET',
-    headers: { 
-        'x-access-token': apiKey
-    }
-})
+function fetchUVData(lat, lon) {
+    fetch(`${uvUrl}?lat=${lat}&lng=${lon}`, {
+        method: 'GET',
+        headers: {
+            'x-access-token': uvApiKey
+        }
+    })
     .then(response => {
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         return response.json();
     })
     .then(data => {
         console.log('UV Index:', data.uv);
-        console.log('UV Time:', data.uv_time);
-        console.log('UV Max:', data.uv_max);
-        console.log('UV Max TIme:', data.uv_max_time);
-        console.log('Ozone:', data.ozone);
-        console.log('Ozone TIme:', data.ozone_time); /*probably keep the UV information only */
+        // Update UV data on the page as needed
     })
     .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
+        console.error('Error fetching UV data:', error);
     });
-
-/* function for the nav left */
-document.addEventListener('DOMContentLoaded', function() {
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const cdLeft = document.querySelector('.cd-left');
-
-    days.forEach(day => {
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('day');
-        dayElement.textContent = day;
-        dayElement.addEventListener('click', function() {
-            document.querySelectorAll('.day').forEach(day => {
-                day.classList.remove('active');
-            });
-            this.classList.add('active');
-            updateWeatherSymbol(day);
-        });
-        if (day === 'Monday') {
-            dayElement.classList.add('active');
-        }
-        cdLeft.appendChild(dayElement);
-    });
-});
-
-function updateWeatherSymbol(day) {
-    const weatherSymbol = getWeatherSymbol(day);
-    const navLeft = document.querySelector('.nav-left');
-    const selectedDay = navLeft.querySelector('.active');
-    if (selectedDay) {
-        selectedDay.innerHTML = '';
-        const img = document.createElement('img');
-        img.src= weatherSymbol; //replace wiith the actual image url
-        selectedDay.appendChild(img);
-    }
 }
 
+function updateWeatherData(data) {
+    const currentDayElement = document.querySelector('.current-day .degrees');
+    currentDayElement.textContent = `${data.data[0].temp}°F`;
 
-
-/* function for the nav right */
-document.addEventListener('DOMContentLoaded', function() {
-    const days = document.querySelectorAll('.day');
-    const uvRayElement = document.getElementById('uvRay');
-    const pollenElement = document.getElementById('pollen');
-    const humidityElement = document.getElementById('humidity');
-    const rainElement = document.getElementById('rain');
-    const snowElement = document.getElementById('snow');
-
-    console.log(days);
-    console.log(uvRayElement);
-    console.log(pollenElement);
-    console.log(humidityElement);
-    console.log(rainElement);
-    console.log(snowElement);
-
-
-    days.forEach(day => {
-        day.addEventListener('click', function() {
-            const selectedDay = this.dataset.day;
-            updateWeatherData(selectedDay);
-        });
+    const weekDaysElements = document.querySelectorAll('.weekForecast .dayOfWeek');
+    data.data.forEach((day, index) => {
+        if (index < 7) {
+            const dayElement = weekDaysElements[index];
+            dayElement.querySelector('.day-degrees').textContent = `${day.temp}°F`;
+            dayElement.querySelector('.day-weather').textContent = `${day.weather.description}`;
+        }
     });
-});
+}
 
+let isCelsius = false;
 
-/* function for section(the entire week/basic information) */
-function updateWeatherData(selectedDay) {
-    switch (selectedDay) {
-        case 'Monday':
-        case 'Tuesday':
-        case 'Wednesday':
-        case 'Thursday':
-        case 'Friday' :
-        case 'Saturday':
-        case 'Sunday' :
+function tempChange() {
+    const currentDayElement = document.querySelector('.current-day .degrees');
+    const weekDaysElements = document.querySelectorAll('.weekForecast .dayOfWeek .day-degrees');
+
+    if (isCelsius) {
+        currentDayElement.textContent = `${convertToFahrenheit(parseFloat(currentDayElement.textContent))}°F`;
+        weekDaysElements.forEach(element => {
+            element.textContent = `${convertToFahrenheit(parseFloat(element.textContent))}°F`;
+        });
+    } else {
+        currentDayElement.textContent = `${convertToCelsius(parseFloat(currentDayElement.textContent))}°C`;
+        weekDaysElements.forEach(element => {
+            element.textContent = `${convertToCelsius(parseFloat(element.textContent))}°C`;
+        });
     }
-   
-};
+    isCelsius = !isCelsius;
+}
 
-/*function for section(basic information for each day)
+function convertToFahrenheit(celsius) {
+    return (celsius * 9 / 5) + 32;
+}
+
+function convertToCelsius(fahrenheit) {
+    return (fahrenheit - 32) * 5 / 9;
+}
+
 function getWeatherSymbol(temperature) {
-    // Example logic to determine weather symbol based on temperature       
     if (temperature < 10) {
         return 'cold';
     } else if (temperature >= 10 && temperature < 25) {
@@ -139,108 +141,6 @@ function getWeatherSymbol(temperature) {
     } else {
         return 'hot';
     }
-}*/
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const weatherData = [
-        { day: 'Monday' },
-        { day: 'Tuesday' },
-        { day: 'Wednesday' },
-        { day: 'Thursday' },
-        { day: 'Friday' },
-        { day: 'Saturday' },
-        { day: 'Sunday' },
-    ];
-
-    const forecastSection = document.querySelector('.weather-forecast');
-
-    weatherData.forEach(dayData => {
-        const dayForecast = document.createElement('div');
-        dayForecast.classList.add('day-forecast');
-
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('day-forecast');
-
-        const temperatureElement = document.createElement('div');
-        temperatureElement.classList.add('temperature');
-
-        const weatherSymbolElement = document.createElement('div');
-        weatherSymbolElement.classList.add('weather-symbol');
-
-        dayForecast.appendChild(dayElement);
-        dayForecast.appendChild(temperatureElement);
-        dayForecast.appendChild(weatherSymbolElement);
-
-        forecastSection.appendChild(dayForecast);
-
-        const apiKey = '5f316c0912544405a317e3e5fb0f69a9';
-        const url = 'https://api.weatherbit.io/v2.0/history/daily';
-        const startDate = '2024-05-16';
-        const endDate = '2024-05-23';
-        const postalCode = '06606';
-        const country = 'US';
-
-        const requestURL = `${url}?postal_code=${postalCode}&country=${country}&start_date=${startDate}&end_date=${endDate}&key=${apiKey}`;
-
-        fetch(requestURL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const temperature = data.temperature; // Assuming the temperature is available in the API response
-                const weatherSymbol = getWeatherSymbol(temperature);
-                weatherSymbolElement.textContent = weatherSymbol;
-                console.log(`Temperature for ${dayData.day}: ${temperature}`);
-                console.log(`Weather symbol for ${dayData.day}: ${weatherSymbol}`);
-            })
-            .catch(error => {
-                console.error('Error fetching temperature:', error);
-            });
-    });
-
-    console.log(forecastSection);
-});
-
-const tempBtn = document.getElementById('fahrenheit/celsius');
-let symbol = document.getElementById('weatherSymbol');
-let weather = fetch() //fetch current weather from api//
-console.log(weather);
-let temp = cel;
-
-//let cel = fetch() NEED TO FINISH FETCH RESPONSE!
-
-let fah = (cel*9.0/5.0)+32.0;
-console.log(fah);
-
-function tempChange () {
-    if (temp == cel) {
-        temp = fah }
-        else {
-            temp = cel
-        }
-        return
-}
-
-tempBtn.addEventListener('click', tempChange);
-
-function changeSymbol () {
-if (temp < 32) {
-    symbol.attributes('src') == "./assets/images.snow-flake.webp";
-    }
-    else if (weather = sunny) {
-        symbol.attributes('src') == "./assets/images.sunny.jpg";
-    }
-    else if (weather = stormy) {
-        symbol.attributes('src') == "./assets/images.storms.jpg";
-    }
-    else if (weather = cloudy) {
-        symbol.attributes('src') == "./assets/images.cloudy.png";
-    }
-    return
 }
 
 
