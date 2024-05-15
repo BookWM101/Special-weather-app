@@ -5,7 +5,7 @@ https://apilist.fun/out/geonames-api (api to fetch specific locations)
 
 https://apilist.fun/out/openuv (api to fetch daily UV forcast)
 
-https://apilist.fun/out/noaa-climate-data (api to fetch weather data)
+https://apilist.fun/out/weatherbit (api to fetch weather data)
 
 # Special Group Project:
 
