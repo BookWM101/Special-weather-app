@@ -1,112 +1,4 @@
-
-const tempBtn = document.getElementById('fahrenheit/celsius');
-let symbol = document.getElementById('weatherSymbol');
-let weather = fetch() //fetch current weather from api//
-let temp = cel;
-let cel = fetch(); //fetch current degrees in celsius from api//
-let fah = (cel*9.0/5.0)+32.0;
-
-function tempChange () {
-    if (temp == cel) {
-        temp = fah }
-        else {
-            temp = cel
-        }
-        return
-}
-
-tempBtn.addEventListener('click', tempChange);
-
-function changeSymbol () {
-if (temp < 32) {
-    symbol.attributes('src') == "./assets/images.snow-flake.webp";
-    }
-    else if (weather = sunny) {
-        symbol.attributes('src') == "./assets/images.sunny.jpg";
-    }
-    else if (weather = stormy) {
-        symbol.attributes('src') == "./assets/images.storms.jpg";
-    }
-    else if (weather = cloudy) {
-        symbol.attributes('src') == "./assets/images.cloudy.png";
-    }
-    return
-}
-
-
-
-
-
-document, addEventListener('DOMContentLoade', function() {
-    const searchBtn = document.getElementById('searchBtn');
-    const cityInput = document.getElementById('cityInput');
-
-    searchBtn.addEventListener('click', function() {
-        let city = cityInput.value.trim();
-        if (city !== '') {
-            fetchWeatherData(city);
-        } else {
-            alert('Please enter a city name.');
-        }
-    })
-});
-
-function fetchWeatherData(dataString) {
-    let dataArray = dataString.split(', ');
-    dataArray.forEach(item => {
-        const [key, value] = item.split(': ');
-        weatherData[key.trim()] = value.trim();
-    });
-    let city = weatherData['City'];
-    let state = weatherData['State'];
-
-    console.log('City:', city);
-    console.log('State:', state);
-}
-
-const tempBtn = document.getElementById('fahrenheit/celsius');
-let symbol = document.getElementById('weatherSymbol');
-let weather = fetch() //fetch current weather from api//
-console.log(weather);
-let temp = cel;
-let cel = fetch(); //fetch current degrees in celsius from api//
-console.log(cel);
-let fah = (cel*9.0/5.0)+32.0;
-console.log(fah);
-
-function tempChange () {
-    if (temp == cel) {
-        temp = fah }
-        else {
-            temp = cel
-        }
-        return
-}
-
-tempBtn.addEventListener('click', tempChange);
-
-function changeSymbol () {
-if (temp < 32) {
-    symbol.attributes('src') == "./assets/images.snow-flake.webp";
-    }
-    else if (weather = sunny) {
-        symbol.attributes('src') == "./assets/images.sunny.jpg";
-    }
-    else if (weather = stormy) {
-        symbol.attributes('src') == "./assets/images.storms.jpg";
-    }
-    else if (weather = cloudy) {
-        symbol.attributes('src') == "./assets/images.cloudy.png";
-    }
-    return
-}
-
-
-
-
-
-=======
-document, addEventListener('DOMContentLoade', function() {
+document, addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const cityInput = document.getElementById('cityInput');
 
@@ -160,6 +52,42 @@ fetch('https://api.openuv.io/api/v1/uv?lat=-33.34&lng=115.342', {
         console.error('There was a problem with the fetch operation:', error);
     });
 
+/* function for the nav left */
+document.addEventListener('DOMContentLoaded', function() {
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const navLeft = document.querySelector('.nav-left');
+
+    days.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+        dayElement.textContent = day;
+        dayElement.addEventListener('click', function() {
+            document.querySelectorAll('.day').forEach(day => {
+                day.classList.remove('active');
+            });
+            this.classList.add('active');
+            updateWeatherSymbol(day);
+        });
+        if (day === 'Monday') {
+            dayElement.classList.add('active');
+        }
+        navLeft.appendChild(dayElement);
+    });
+});
+
+function updateWeatherSymbol(day) {
+    const weatherSymbol = getWeatherSymbol(day);
+    const navLeft = document.querySelector('.nav-left');
+    const selectedDay = navLeft.querySelector('.active');
+    if (selectedDay) {
+        selectedDay.innerHTML = '';
+        const img = document.createElement('img');
+        img.src= weatherSymbol; //replace wiith the actual image url
+        selectedDay.appendChild(img);
+    }
+}
+
+
 
 /* function for the nav right */
 document.addEventListener('DOMContentLoaded', function() {
@@ -202,15 +130,25 @@ function updateWeatherData(selectedDay) {
 };
 
 /*function for section(basic information for each day) */
+function getWeatherSymbol(temperature) {
+    // Example logic to determine weather symbol based on temperature       
+    if (temperature < 10) {
+        return 'cold';
+    } else if (temperature >= 10 && temperature < 25) {
+        return 'moderate';
+    } else {
+        return 'hot';
+    }
+}
 document.addEventListener('DOMContentLoaded', function() {
     const weatherData = [
-        {day: 'Monday, '},
-        {day: 'Tuesday, '},
-        {day: 'Wednesday, '},
-        {day: 'Thursday, '},
-        {day: 'Friday, '},
-        {day: 'Saturday, '},
-        {day: 'Sunday, '},
+        { day: 'Monday' },
+        { day: 'Tuesday' },
+        { day: 'Wednesday' },
+        { day: 'Thursday' },
+        { day: 'Friday' },
+        { day: 'Saturday' },
+        { day: 'Sunday' },
     ];
 
     const forecastSection = document.querySelector('.weather-forecast');
@@ -218,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
     weatherData.forEach(dayData => {
         const dayForecast = document.createElement('div');
         dayForecast.classList.add('day-forecast');
-        
+
         const dayElement = document.createElement('div');
         dayElement.classList.add('day-forecast');
 
         const temperatureElement = document.createElement('div');
         temperatureElement.classList.add('temperature');
 
-        const weatherSymbolElement = document.createElement.('div');
+        const weatherSymbolElement = document.createElement('div');
         weatherSymbolElement.classList.add('weather-symbol');
 
         dayForecast.appendChild(dayElement);
@@ -234,18 +172,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
         forecastSection.appendChild(dayForecast);
 
-        // Fetch temperature data for each day from the weather API(write the weather api here) */
+        const apiKey = '5f316c0912544405a317e3e5fb0f69a9';
+        const url = 'https://api.weatherbit.io/v2.0/history/daily';
+        const startDate = '2024-05-16';
+        const endDate = '2024-05-23';
+        const postalCode = '06606';
+        const country = 'US';
 
-        const weatherSymbol = getWeatherSymbol(temperature);
-        weatherSymbolElement.textContent = weatherSymbol;
+        const requestURL = `${url}?postal_code=${postalCode}&country=${country}&start_date=${startDate}&end_date=${endDate}&key=${apiKey}`;
 
-        console.log('Temperature for ${dayData.day}; ${temperature} ') /*need to maybe redo after finishing java, making sure everyday will change their f to c , c to f */
-        console.log(`Weather symbol for ${dayData.day}: ${weatherSymbol}`);
-    })
-    .catch(error => {
-        console.error('Error fetching temperature:', error);
-})
-        console.log(forecastSection);
+        fetch(requestURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const temperature = data.temperature; // Assuming the temperature is available in the API response
+                const weatherSymbol = getWeatherSymbol(temperature);
+                weatherSymbolElement.textContent = weatherSymbol;
+                console.log(`Temperature for ${dayData.day}: ${temperature}`);
+                console.log(`Weather symbol for ${dayData.day}: ${weatherSymbol}`);
+            })
+            .catch(error => {
+                console.error('Error fetching temperature:', error);
+            });
+    });
+
+    console.log(forecastSection);
 });
 
 const tempBtn = document.getElementById('fahrenheit/celsius');
@@ -284,6 +239,7 @@ if (temp < 32) {
     }
     return
 }
+
 
 
 
