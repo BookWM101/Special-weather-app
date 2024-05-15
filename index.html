@@ -13,20 +13,30 @@
         <input type="text" id="cityInput" placeholder="Enter Location">
         <button id="searchBtn">Search</button>
      </div>
+     
      <span>&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-     <h1 class="header-title">Weather App</h1>
+     
+     <div class="header-center">
+      <h1>Weather App</h1>
+     </div>
+     
      <span>&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-        <!-- for the span, do it in the css!-->
-        <buton id="farenheit/celsius">F/C</buton>
+     
+     <div class="header-right"
+      <!-- for the span, do it in the css!-->
+      <button id="farenheit/celsius">F/C</buton>
+     </div>
    </header>
    
-   <nav>
-     <div class="nav-left">
+   <div class="current-day">
+     <div class="cd-left">
         <!-- <img id="weatherSymbol" src="some image"> -->
-        <div class="day">Monday</div>
+        <div class="day">Monday:</div>
+        <br>
         <div class="degrees">72°F</div>
      </div>
-     <div class="nav-right">
+
+     <div class="cd-right">
         <ul class="weather-details">
             <li>Uv Ray:</li>
             <li>Pollen:</li>
@@ -34,14 +44,17 @@
             <li>Snow:</li>
         </ul>
      </div>
-   </nav>
+   </div>
 
-   <section class="weather-forecast">
-     <div class="day">
+    <div class="weekForecast">
+     <div class="dayOfWeek">
         <div class="day-name">Monday</div>
-        <div class="degrees">75°F</div>
-        <div class="rain">10%</div>
+        <br> 
+        <div class="day-degrees">75°F</div>
+        <br>
+        <div class="day-weather">10%</div>
      </div>
+   </div>
      
    </seciotn>
    <script src="./assets/js/script.js"></script>
