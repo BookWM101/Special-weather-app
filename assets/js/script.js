@@ -81,7 +81,7 @@ function fetchUVData(lat, lon) {
     })
     .then(data => {
         console.log('UV Index:', data.result.uv);
-        // Update UV data on the page as needed
+        
     })
     .catch(error => {
         console.error('Error fetching UV data:', error);
