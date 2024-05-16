@@ -145,6 +145,25 @@ function convertToCelsius(fahrenheit) {
     return (fahrenheit - 32) * 5 / 9;
 }
 
-
+function changeSymbol () {
+    let weather = document.querySelectorAll('.day-weather');
+    const symbol = document.querySelectorAll('.image');
+    if (weather == "Heavy rain" || "Light shower rain" || "Light rain" || "Moderate rain") {
+        // document.querySelectorAll(".image").src="./assets/images/rainy.jpg"
+        symbol.src = './asstes/images/rainy.jpg';
+    }
+    else if (weather == "Broken clouds" || "Overcast clouds" || "Scattered clouds") {
+        // document.querySelectorAll(".image").src="./assets/images/cloudy.png"
+        symbol.src = './assets/images/cloudy.png';
+    }
+    else if (weather == "Thunderstorm with heavy rain" || "Thunderstorms with rain") {
+        // document.querySelectorAll(".image").src="./assets/images/storms.jpg"
+        symbol.src = './assets/images/storms.jpg';
+    }
+    else {
+        // document.querySelectorAll(".image").src="./assets/images/sunny.jpg"
+        symbol.src = './assets/images/sunny.jpg';
+    }
+}
 
 
