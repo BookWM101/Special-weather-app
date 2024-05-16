@@ -9,7 +9,7 @@ https://apilist.fun/out/weatherbit (api to fetch weather data)
 
 # Special Group Project:
 
-In this project, you will find a simple weather app, utilizing two or more api's, and offering some unique functions.
+In this project, you will find a simple weather app, utilizing two api's, one which fetches basic weather data, and the other which gets the uv ray forecast.
 
 ## Instructions on Use:
 
@@ -17,9 +17,11 @@ In this project, you will find a simple weather app, utilizing two or more api's
 
 * In the upper left hand corner you'll find a location search bar.
 
-* Enter your location
+* Enter your location like this (location, state).
 
-* Weather data and alerts will automatically be customized based on the location entered.
+* Weather data will automatically be customized based on the location entered.
+
+*You can click on the button in the upper right hand corner to change the temperature from celsius to fahrenheit.
 
 ## Acceptance Criteria
 
@@ -27,15 +29,15 @@ In this project, you will find a simple weather app, utilizing two or more api's
 
 * User can easily input their location, and diplayed data will change accordingly.
 
-* Alerts will automatically appear on screen when needed to warn user of severe weather.
+* When changing temperature from celsius to fahrenheit, the data is correct, and easy to understand.
 
 ## Sample Page
 * The following screenshot is provided as an image of the final user UI: 
 
-assets\images\Bootcamp Stuff_.jpg
+![image of final ui design](image.png)
 
 ## 💡 Notes
 
-Working in a team, we created a simple but unique weather app. This app utilizes two api's, location, and weather, in order to function. Aditionally, in order to make our app unique, we inserted customized weather alerts based on the user's location, in the even of severe weather.
+Working in a team, we created a simple weather app. This app utilizes two api's, uv ray information, and weather, in order to function. Aditionally, we created a nifty button to easily change the displayed temperature data from imperial to the metric system.
 
 //basic MIT license//

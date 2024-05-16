@@ -56,7 +56,7 @@ function fetchWeatherData(city) {
         .then(data => {
             console.log(data);  // Log the complete response to understand its structure
             updateWeatherData(data);
-            const { lat, lon } = data.city_name; // Use the correct properties from the API response
+            const { lat, lon } = data; // Use the correct properties from the API response
             fetchUVData(lat, lon);
         })
         .catch(error => {
@@ -81,7 +81,8 @@ function fetchUVData(lat, lon) {
         return response.json();
     })
     .then(data => {
-        console.log('UV Index:', data.result.uv);
+        console.log('UV API Response:', data); // Log the entire response
+        console.log('UV Index:', data.result.uv); // Log UV index separately
         // Update UV data on the page as needed
     })
     .catch(error => {
@@ -102,6 +103,11 @@ function updateWeatherData(data) {
             dayElement.addEventListener('click', () => {
                 updateCurrentDayInfo(day, dayElement.querySelector('.day-name').textContent);
             });
+
+            if (day.uvRay !== undefined && day.pollen !== undefined) {
+                dayElement.dataset.uvRay = day.uvRay;
+                dayElement.dataset.pollen = day.pollen;
+            }
         }
     });
 }
@@ -109,8 +115,6 @@ function updateWeatherData(data) {
 function updateCurrentDayInfo(day, dayName) {
     const currentDayElement = document.querySelector('.current-day .degrees');
     currentDayElement.textContent = `${day.temp}°F`; 
-    const pollenElement = document.querySelector('.current-day .weather-details li:nth-child(2)');
-    pollenElement.textContent = `Pollen: ${day.pollen}`;
     const uvRayElement = document.querySelector('.current-day .weather-details li:nth-child(1)');
     uvRayElement.textContent = `UV Ray: ${day.uvRay}`;
     const dayNameElement = document.querySelector('.current-day .day');
@@ -169,5 +173,6 @@ function changeSymbol () {
         console.log(symbol);
     }
 }
+
 
 
