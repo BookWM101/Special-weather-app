@@ -19,14 +19,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial setup for week days
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const dates = ['2024-05-16', '2024-05-17', '2024-05-18', '2024-05-19', '2024-05-20', '2024-05-21', '2024-05-22'];
 
-    days.forEach(day => {
+    days.forEach((day, index) => {
         const dayElement = document.createElement('div');
         dayElement.classList.add('dayOfWeek');
 
         const dayNameElement = document.createElement('div');
         dayNameElement.classList.add('day-name');
-        dayNameElement.textContent = day;
+        dayNameElement.textContent = `${day}, ${dates[index]}`; // Include the date next to the day
 
         const dayDegreesElement = document.createElement('div');
         dayDegreesElement.classList.add('day-degrees');
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         forecastSection.appendChild(dayElement);
     });
 });
+    
 
 function fetchWeatherData(city) {
     const weatherApiKey = '5f316c0912544405a317e3e5fb0f69a9';
@@ -56,7 +58,7 @@ function fetchWeatherData(city) {
         .then(data => {
             console.log(data);  // Log the complete response to understand its structure
             updateWeatherData(data);
-            const { lat, lon } = data; // Use the correct properties from the API response
+            const { lat, lon } = data; e
             fetchUVData(lat, lon);
         })
         .catch(error => {
@@ -81,9 +83,9 @@ function fetchUVData(lat, lon) {
         return response.json();
     })
     .then(data => {
-        console.log('UV API Response:', data); // Log the entire response
-        console.log('UV Index:', data.result.uv); // Log UV index separately
-        // Update UV data on the page as needed
+        console.log('UV API Response:', data); 
+        console.log('UV Index:', data.result.uv); 
+        
     })
     .catch(error => {
         console.error('Error fetching UV data:', error);
@@ -103,11 +105,8 @@ function updateWeatherData(data) {
             dayElement.addEventListener('click', () => {
                 updateCurrentDayInfo(day, dayElement.querySelector('.day-name').textContent);
             });
-
-            if (day.uvRay !== undefined && day.pollen !== undefined) {
-                dayElement.dataset.uvRay = day.uvRay;
-                dayElement.dataset.pollen = day.pollen;
-            }
+            const uvIndex = day.uvIndex; 
+            updateUVData(uvIndex); 
         }
     });
 }
@@ -119,6 +118,28 @@ function updateCurrentDayInfo(day, dayName) {
     uvRayElement.textContent = `UV Ray: ${day.uvRay}`;
     const dayNameElement = document.querySelector('.current-day .day');
     dayNameElement.textContent = dayName;
+
+    // Update weather details for the clicked day
+    const weatherDetailsElement = document.querySelector('.current-day .weather-details');
+    const weatherDescriptionElements = document.querySelectorAll('.current-day .weather-details li');
+    weatherDescriptionElements.forEach(element => {
+        if (!element.textContent.startsWith('UV Ray')) {
+            // Clear only weather description elements, not UV ray
+            weatherDetailsElement.removeChild(element);
+        }
+    });
+
+    const weatherDescriptionElement = document.createElement('li');
+    weatherDescriptionElement.textContent = `${day.weather.description}`;
+    weatherDetailsElement.appendChild(weatherDescriptionElement);
+
+    console.log('Updated Current Day Element:', currentDayElement);
+    console.log('Updated UV Ray Element:', uvRayElement);
+    console.log('Updated Day Name Element:', dayNameElement);
+}
+function updateUVData(uvIndex) {
+    const uvRayElement = document.querySelector('.current-day .weather-details li:nth-child(1)');
+    uvRayElement.textContent = `UV Ray: ${uvIndex}`;
 }
 
 let isCelsius = false;
