@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cityInput = document.getElementById('cityInput');
     const tempBtn = document.getElementById('farenheit/celsius');
     const forecastSection = document.querySelector('.weekForecast');
-    
+
     // Search button event listener
     searchBtn.addEventListener('click', function() {
         const city = cityInput.value.trim();
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     days.forEach(day => {
         const dayElement = document.createElement('div');
         dayElement.classList.add('dayOfWeek');
-        
+
         const dayNameElement = document.createElement('div');
         dayNameElement.classList.add('day-name');
         dayNameElement.textContent = day;
@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
         dayElement.appendChild(dayNameElement);
         dayElement.appendChild(dayDegreesElement);
         dayElement.appendChild(dayWeatherElement);
-        
+
         forecastSection.appendChild(dayElement);
     });
 });
 
 function fetchWeatherData(city) {
     const weatherApiKey = '5f316c0912544405a317e3e5fb0f69a9';
-    const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${weatherApiKey}`;
+    const weatherUrl = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${weatherApiKey}&units=I`;
 
     fetch(weatherUrl)
         .then(response => {
@@ -54,8 +54,9 @@ function fetchWeatherData(city) {
             return response.json();
         })
         .then(data => {
+            console.log(data);  // Log the complete response to understand its structure
             updateWeatherData(data);
-            const { lat, lon } = data.city;
+            const { lat, lon } = data.city_name; // Use the correct properties from the API response
             fetchUVData(lat, lon);
         })
         .catch(error => {
@@ -81,7 +82,7 @@ function fetchUVData(lat, lon) {
     })
     .then(data => {
         console.log('UV Index:', data.result.uv);
-        
+        // Update UV data on the page as needed
     })
     .catch(error => {
         console.error('Error fetching UV data:', error);
@@ -90,13 +91,13 @@ function fetchUVData(lat, lon) {
 
 function updateWeatherData(data) {
     const currentDayElement = document.querySelector('.current-day .degrees');
-    currentDayElement.textContent = `${data.data[0].temp}°F`;
+    currentDayElement.textContent = `${data.data[0].temp.toFixed(2)}°F`;
 
     const weekDaysElements = document.querySelectorAll('.weekForecast .dayOfWeek');
     data.data.forEach((day, index) => {
         if (index < 7) {
             const dayElement = weekDaysElements[index];
-            dayElement.querySelector('.day-degrees').textContent = `${day.temp}°F`;
+            dayElement.querySelector('.day-degrees').textContent = `${day.temp.toFixed(2)}°F`;
             dayElement.querySelector('.day-weather').textContent = `${day.weather.description}`;
         }
     });
@@ -109,14 +110,14 @@ function tempChange() {
     const weekDaysElements = document.querySelectorAll('.weekForecast .dayOfWeek .day-degrees');
 
     if (isCelsius) {
-        currentDayElement.textContent = `${convertToFahrenheit(parseFloat(currentDayElement.textContent))}°F`;
+        currentDayElement.textContent = `${convertToFahrenheit(parseFloat(currentDayElement.textContent)).toFixed(2)}°F`;
         weekDaysElements.forEach(element => {
-            element.textContent = `${convertToFahrenheit(parseFloat(element.textContent))}°F`;
+            element.textContent = `${convertToFahrenheit(parseFloat(element.textContent)).toFixed(2)}°F`;
         });
     } else {
-        currentDayElement.textContent = `${convertToCelsius(parseFloat(currentDayElement.textContent))}°C`;
+        currentDayElement.textContent = `${convertToCelsius(parseFloat(currentDayElement.textContent)).toFixed(2)}°C`;
         weekDaysElements.forEach(element => {
-            element.textContent = `${convertToCelsius(parseFloat(element.textContent))}°C`;
+            element.textContent = `${convertToCelsius(parseFloat(element.textContent)).toFixed(2)}°C`;
         });
     }
     isCelsius = !isCelsius;
@@ -130,14 +131,6 @@ function convertToCelsius(fahrenheit) {
     return (fahrenheit - 32) * 5 / 9;
 }
 
-function getWeatherSymbol(temperature) {
-    if (temperature < 10) {
-        return 'cold';
-    } else if (temperature >= 10 && temperature < 25) {
-        return 'moderate';
-    } else {
-        return 'hot';
-    }
-}
+
 
 
