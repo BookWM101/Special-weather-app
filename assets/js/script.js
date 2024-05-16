@@ -91,16 +91,30 @@ function fetchUVData(lat, lon) {
 
 function updateWeatherData(data) {
     const currentDayElement = document.querySelector('.current-day .degrees');
-    currentDayElement.textContent = `${data.data[0].temp.toFixed(2)}°F`;
+    currentDayElement.textContent = `${data.data[0].temp}°F`;
 
     const weekDaysElements = document.querySelectorAll('.weekForecast .dayOfWeek');
     data.data.forEach((day, index) => {
         if (index < 7) {
             const dayElement = weekDaysElements[index];
-            dayElement.querySelector('.day-degrees').textContent = `${day.temp.toFixed(2)}°F`;
+            dayElement.querySelector('.day-degrees').textContent = `${day.temp}°F`;
             dayElement.querySelector('.day-weather').textContent = `${day.weather.description}`;
+            dayElement.addEventListener('click', () => {
+                updateCurrentDayInfo(day, dayElement.querySelector('.day-name').textContent);
+            });
         }
     });
+}
+
+function updateCurrentDayInfo(day, dayName) {
+    const currentDayElement = document.querySelector('.current-day .degrees');
+    currentDayElement.textContent = `${day.temp}°F`; 
+    const pollenElement = document.querySelector('.current-day .weather-details li:nth-child(2)');
+    pollenElement.textContent = `Pollen: ${day.pollen}`;
+    const uvRayElement = document.querySelector('.current-day .weather-details li:nth-child(1)');
+    uvRayElement.textContent = `UV Ray: ${day.uvRay}`;
+    const dayNameElement = document.querySelector('.current-day .day');
+    dayNameElement.textContent = dayName;
 }
 
 let isCelsius = false;
