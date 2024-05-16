@@ -151,18 +151,22 @@ function changeSymbol () {
     if (weather == "Heavy rain" || "Light shower rain" || "Light rain" || "Moderate rain") {
         // document.querySelectorAll(".image").src="./assets/images/rainy.jpg"
         symbol.src = './asstes/images/rainy.jpg';
+        console.log(symbol);
     }
     else if (weather == "Broken clouds" || "Overcast clouds" || "Scattered clouds") {
         // document.querySelectorAll(".image").src="./assets/images/cloudy.png"
         symbol.src = './assets/images/cloudy.png';
+        console.log(symbol);
     }
     else if (weather == "Thunderstorm with heavy rain" || "Thunderstorms with rain") {
         // document.querySelectorAll(".image").src="./assets/images/storms.jpg"
         symbol.src = './assets/images/storms.jpg';
+        console.log(symbol);
     }
     else {
         // document.querySelectorAll(".image").src="./assets/images/sunny.jpg"
         symbol.src = './assets/images/sunny.jpg';
+        console.log(symbol);
     }
 }
 
