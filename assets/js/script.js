@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cityInput = document.getElementById('cityInput');
     const tempBtn = document.getElementById('farenheit/celsius');
     const forecastSection = document.querySelector('.weekForecast');
+    let currentDay;
 
     // Search button event listener
     searchBtn.addEventListener('click', function() {
@@ -58,7 +59,7 @@ function fetchWeatherData(city) {
         .then(data => {
             console.log(data);  // Log the complete response to understand its structure
             updateWeatherData(data);
-            const { lat, lon } = data; e
+            const { lat, lon } = data; // Use the correct properties from the API response
             fetchUVData(lat, lon);
         })
         .catch(error => {
@@ -83,8 +84,8 @@ function fetchUVData(lat, lon) {
         return response.json();
     })
     .then(data => {
-        console.log('UV API Response:', data); 
-        console.log('UV Index:', data.result.uv); 
+        console.log('UV API Response:', data); // Log the entire response
+        console.log('UV Index:', data.result.uv); // Log UV index separately
         
     })
     .catch(error => {
@@ -93,6 +94,7 @@ function fetchUVData(lat, lon) {
 }
 
 function updateWeatherData(data) {
+    console.log('updateWeatherData');
     const currentDayElement = document.querySelector('.current-day .degrees');
     currentDayElement.textContent = `${data.data[0].temp}°F`;
 
@@ -105,17 +107,16 @@ function updateWeatherData(data) {
             dayElement.addEventListener('click', () => {
                 updateCurrentDayInfo(day, dayElement.querySelector('.day-name').textContent);
             });
-            const uvIndex = day.uvIndex; 
-            updateUVData(uvIndex); 
         }
     });
 }
 
 function updateCurrentDayInfo(day, dayName) {
+    currentDay = day.valid_date;  
     const currentDayElement = document.querySelector('.current-day .degrees');
     currentDayElement.textContent = `${day.temp}°F`; 
     const uvRayElement = document.querySelector('.current-day .weather-details li:nth-child(1)');
-    uvRayElement.textContent = `UV Ray: ${day.uvRay}`;
+    uvRayElement.textContent = `UV Ray: ${day.uv}`;
     const dayNameElement = document.querySelector('.current-day .day');
     dayNameElement.textContent = dayName;
 
@@ -138,6 +139,7 @@ function updateCurrentDayInfo(day, dayName) {
     console.log('Updated Day Name Element:', dayNameElement);
 }
 function updateUVData(uvIndex) {
+    console.log('updateUVData', uvIndex);
     const uvRayElement = document.querySelector('.current-day .weather-details li:nth-child(1)');
     uvRayElement.textContent = `UV Ray: ${uvIndex}`;
 }
