@@ -18,7 +18,8 @@ body {
 header {
     display: flex;
     flex-wrap: wrap;
-    flex-grow: 1;
+    flex-grow: 1.5;
+    flex-shrink: 1.5;
     padding-top: 5px;
     height: 97px;
     border: solid 2px black;
@@ -59,7 +60,7 @@ header {
     display: flex;
     flex-grow: 1.5;
     flex-shrink: 1.5;
-    flex: wrap;
+    flex-wrap: wrap;
     justify-content: center;
     height: 339.5px;
     padding-top: 20px;
