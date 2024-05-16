@@ -1,17 +1,18 @@
 * {
-    padding: 0px;
-    margin: 0px;
+    background-color: white;
+    padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
 html {
     height: 100%;
-    width: 100%
+    width: 100%;
 }
 
 body {
     background-color: black;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 header {
@@ -20,6 +21,8 @@ header {
     flex-grow: 1.5;
     flex-shrink: 1.5;
     padding-top: 20px;
+    flex-grow: 1;
+    padding-top: 5px;
     height: 97px;
     border: solid 2px black;
     background-color: white;
@@ -36,28 +39,15 @@ header {
     border: solid 2px black;
     border-radius: 15px;
     height: 339.5px;
-    padding-top: 20px;
     background-color: rgb(79, 79, 244);
 }
 
-.day {
-    font-size: 20px;
-}
-
-.dayOfWeek {
-    padding-right: 50px;
-}
-
-.day-name {
-    font-size: 20px;
-}
-
- .cd-left {
+.cd-left {
     padding-right: 50px;
 }
 
 .cd-right {
-    padding-left: 20px;
+    padding-left: 50px;
 }
 
 .day {
@@ -81,9 +71,26 @@ header {
     background-color: grey;
 }
 
+.dayOfWeek {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100px;
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+    text-align: center;
+}
+
 button {
     cursor: pointer;
-    text: white;
+    color: white;
+    background-color: black;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 button:hover {
